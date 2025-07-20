@@ -1,0 +1,6 @@
+Flask
+google-generativeai
+matplotlib
+textblob
+speechrecognition
+python-dotenv

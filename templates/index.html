@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interview Analysis System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 10px;
+        }
+        button {
+            margin: 10px 5px;
+            padding: 10px 15px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🎤 Interview Analysis System</h1>
+
+    <!-- Recording and form -->
+    <form id="upload-form" method="POST" action="{{ url_for('analyze') }}">
+        <label for="record-btn">🎙️ Speak Now</label><br>
+        <button type="button" id="record-btn">🎤 Start Recording</button>
+        <button type="button" id="stop-btn" disabled>⏹️ Stop & Submit</button>
+
+        <input type="hidden" name="web_transcript" id="web_transcript">
+
+        <div id="loading" style="display:none; margin-top: 20px;">⏳ Processing, please wait...</div>
+        <div id="preview" style="margin-top: 15px; font-style: italic; color: #333;"></div>
+    </form>
+
+    <!-- Results -->
+    {% if transcript %}
+        <hr>
+        <h2>📝 Transcript</h2>
+        <p>{{ transcript }}</p>
+
+        <h2>📊 Sentiment: {{ sentiment }}</h2>
+        <img src="{{ chart_url }}" width="300" />
+
+        {% if feedback %}
+            <h2>💡 Feedback</h2>
+            <p>{{ feedback }}</p>
+        {% endif %}
+
+        {% if gemini_feedback %}
+            <h2>🤖 Gemini Smart Feedback</h2>
+            <p>{{ gemini_feedback }}</p>
+        {% endif %}
+
+        {% if fluency %}
+            <hr>
+            <h2>🗣️ Fluency Metrics</h2>
+            <ul>
+                <li><strong>Words per Minute:</strong> {{ fluency.wpm }}</li>
+                <li><strong>Total Words:</strong> {{ fluency.word_count }}</li>
+                <li><strong>Filler Words:</strong> {{ fluency.filler_count }} ({{ (fluency.filler_ratio * 100) | round(2) }}%)</li>
+            </ul>
+        {% endif %}
+    {% endif %}
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  let recognition;
+  let finalTranscript = "";
+
+  const recordBtn = document.getElementById('record-btn');
+  const stopBtn = document.getElementById('stop-btn');
+  const preview = document.getElementById('preview');
+  const loading = document.getElementById('loading');
+  const transcriptInput = document.getElementById('web_transcript');
+
+  recordBtn.addEventListener('click', () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Speech recognition not supported in this browser.");
+      return;
+    }
+
+    recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = true;
+    recognition.continuous = true;
+
+    finalTranscript = "";
+    preview.textContent = "🎤 Listening... Speak now.";
+    loading.style.display = "none";
+
+    recognition.onresult = (event) => {
+      let interimTranscript = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript + " ";
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+      preview.textContent = finalTranscript + interimTranscript;
+    };
+
+    recognition.onerror = (event) => {
+      alert("Speech recognition error: " + event.error);
+      recordBtn.disabled = false;
+      stopBtn.disabled = true;
+      loading.style.display = "none";
+      preview.textContent = "";
+    };
+
+    recognition.start();
+    recordBtn.disabled = true;
+    stopBtn.disabled = false;
+  });
+
+  stopBtn.addEventListener('click', () => {
+    if (recognition) recognition.stop();
+
+    stopBtn.disabled = true;
+    recordBtn.disabled = false;
+
+    const trimmedTranscript = finalTranscript.trim();
+    if (!trimmedTranscript) {
+      alert("No transcript captured. Please try again.");
+      preview.textContent = "";
+      loading.style.display = "none";
+      return;
+    }
+
+    transcriptInput.value = trimmedTranscript;
+    loading.style.display = "block";
+
+    document.getElementById('upload-form').submit();
+  });
+});
+</script>
+
+</body>
+</html>

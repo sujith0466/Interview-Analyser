@@ -1,0 +1,155 @@
+/* Base Reset & Typography */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f3f5f9;
+    color: #2c3e50;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Container */
+.container {
+    max-width: 900px;
+    margin: 50px auto;
+    background-color: #ffffff;
+    padding: 40px 50px;
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Headings */
+h1 {
+    text-align: center;
+    color: #005bb5;
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    margin-top: 40px;
+    font-size: 24px;
+    color: #34495e;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 8px;
+}
+
+/* Form Styling */
+form {
+    margin-bottom: 30px;
+}
+
+label {
+    font-weight: 600;
+    display: block;
+    margin-top: 20px;
+    color: #2d3436;
+}
+
+input[type="file"] {
+    margin-top: 8px;
+    padding: 10px;
+    border: 1px solid #dcdde1;
+    border-radius: 8px;
+    width: 100%;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Buttons */
+button {
+    background-color: #0066cc;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #004a99;
+}
+
+/* Audio Preview */
+#audio-preview {
+    margin-top: 20px;
+}
+
+#audio-preview audio {
+    width: 100%;
+    outline: none;
+    border-radius: 6px;
+    background: #ecf0f1;
+    margin-top: 10px;
+}
+
+/* Output Box */
+.output-box {
+    background: #f0f8ff;
+    border-left: 5px solid #3498db;
+    padding: 20px 25px;
+    margin-top: 30px;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.output-box strong {
+    color: #2c3e50;
+}
+
+/* Feedback Lists */
+ul {
+    margin-top: 10px;
+    padding-left: 20px;
+    list-style: disc;
+    color: #444;
+}
+
+hr {
+    margin: 35px 0;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+/* Loading */
+#loading {
+    color: #888;
+    font-style: italic;
+    margin-top: 15px;
+}
+
+/* Image */
+img {
+    margin-top: 20px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .container {
+        padding: 25px;
+        margin: 20px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
